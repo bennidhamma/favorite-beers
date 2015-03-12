@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="build/react.js"></script>
+    <script src="build/JSXTransformer.js"></script>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/jsx">
+      var styles = ['Pilsner', 'Stout', 'IPA', 'Lager'];
+      var countries = ['USA', 
+        'Belgium', 'Germany', 'England', 'New Zealand', 'Ireland'];
+      var beers = [];
+      var userProfile = {
+        favoriteBeers: []
+      };
+
+      function addBeer(name, rating, style, country) {
+        var beer = {
+          name: name,
+          rating: rating,
+          style: style,
+          country: country
+        };
+        beers.push(beer);
+      }
+
+      addBeer('Becks', 4.2, 'Lager', 'Germany');
+      addBeer('Tui', 2.5, 'Lager', 'New Zealand');
+      addBeer('Guiness', 5, 'Stout', 'Ireland');
+      addBeer('Fremont IPA', 4, 'IPA', 'USA');
+
+      var GetBeer = React.createClass({
+        updateBeer: function(e) {
+          var beer = null;
+          for (var i = 0; i < beers.length; i++) {
+            var currentBeer = beers[i];
+            if (e.target.value == currentBeer.name) {
+              beer = currentBeer;
+              break;
+            }
+          }
+          this.setState({beer: beer});
+        },
+
+        /**
+         * Adds the currently selected beer into the user's
+         * favorites.
+         */
+        addFavorite: function() {
+          userProfile.favoriteBeers.push(this.state.beer);
+        },
+
+        render: function() {
+          var options = beers.map(function(beer) {
+            return <option value={beer.name}>{beer.name}</option>;
+          });
+          return <div>
+            <label>What is your favorite beer?</label>
+            <select onChange={this.updateBeer}>
+              {options}
+            </select>
+            <button onClick={this.addFavorite}>Add Favorite Beer</button>
+          </div>;
+        }
+      })
+
+      React.render(
+        <GetBeer/>,
+        document.getElementById('example')
+      );
+    </script>
+  </body>
+</html>
